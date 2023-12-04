@@ -8,6 +8,7 @@
         "regex": "cpp",
         "algorithm": "cpp",
         "iterator": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "vector": "cpp"
     }
 }
