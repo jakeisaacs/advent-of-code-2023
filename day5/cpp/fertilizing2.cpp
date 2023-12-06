@@ -37,18 +37,26 @@ vector<long> checkSeed(long seed, vector<vector<vector<long> > >& m) {
             // cout << m[i][j][0] << " " << m[i][j][1] << " " << m[i][j][2] << endl;
             if (seed >= m[i][j][0] && seed < m[i][j][1])
             {
-                seeds.push_back(m[i][j][1]);
+                if(i==0) {
+                    seeds.push_back(m[i][j][1]-1);
+                }
+
                 seed = m[i][j][2] + (seed - m[i][j][0]);
-                seeds.push_back(seed);
                 // cout << "START: " << m[i][j][0] << " END: " << m[i][j][1] <<  " Match: " << seed << endl;
                 break;
             }
             j++;
         }
+        // if (j == m[i].size()) {
+        //     seed = -1;
+        //     break;
+        // }
         i++;
     }
 
     seeds.push_back(seed);
+
+    // cout <<  i << " | " << seeds.size() << " | " << seeds[0] << " | " << seeds[1] << endl; 
 
     // cout << endl;
     return seeds;
@@ -78,13 +86,19 @@ int main() {
 
     f.close();
 
-    for (int i=0; i < seeds.size() - 1; i+=2) {
+    for (int i=0; i < seeds.size(); i+=2) {
+        cout << "Seed: " << seeds[i] << " Range: " << (seeds[i] + seeds[i+1]) << endl;
         for(long j=seeds[i];j<(seeds[i]+seeds[i+1]);j++)
         {
+            // cout << i << ": " << j << endl;
             tmp = checkSeed(j, m);
-            min = tmp[6] < min ? tmp[6] : min;
-            j = tmp[0];
+            if (tmp[1] <= 0) break;
+            min = tmp[1] < min ? tmp[1] : min;
+            // j = tmp[0] > j ? tmp[0] : j;
+
+            // cout << tmp[0] << " --- " << tmp[1] << endl;
         }
+        cout << "Index: " << i << "Current Min: " << min << endl;
     }
 
     cout << "Min value of locations is: " << min << endl;
