@@ -15,10 +15,14 @@ int main() {
     for (int i=0;i<(r_time/2)+1;i++) {
         dist = (r_time - i) * i;
 
-        if (dist > r_dist) comb++;
+        if (dist > r_dist) {
+            cout << i << " | " << r_time-(i*2)+1 << endl;
+            break;
+            // comb++;
+        }
     }
 
-    cout << "Total win combinations: " << (comb*2-1) << endl;
+    // cout << "Total win combinations: " << (comb*2-1) << endl;
 
     return 0;
 }
