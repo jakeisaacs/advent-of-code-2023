@@ -13,15 +13,12 @@ const string
     validUp = "|F7",
     validDown = "|LJ", 
     validLeft = "-LF", 
-    validRight = "-J7",
-    insidePiece = "|J7",
-    outsidePiece = "|LFJ7-";
+    validRight = "-J7";
 
 map<pair<int, int>, char> pipes, interior;
 vector<pair<int, int> > coords;
 
 void CheckPipes(vector<string>& maze, char prev, int r, int c, int& steps) {
-    // cout << "Row: " << r << " Col: " << c << " Val: " << maze[r][c] << " Steps: " << steps << endl;
     
     pipes[make_pair(r,c)] = maze[r][c];
 
@@ -111,21 +108,18 @@ void StartPipeSearch(vector<string>& maze, int r, int c, int& steps) {
 }
 
 
-void ShoelaceCalc() {
+void PicksTheoremCalc() {
     int sum = 0;
     const int N = coords.size();
 
-    reverse(coords.begin(), coords.end());
-
+    // Using Shoelace formula for interior lattice points
     for (int i=0;i<N;i++) {
-        cout << coords[i].first << ", " << coords[i].second << " ";
         sum += coords[i].first * coords[(i+1)%N].second - coords[i].second * coords[(i+1)%N].first;
-        cout << sum << endl;
     }
 
     int area = abs(sum/2) - N/2 + 1;
 
-    cout << "Calcularted Area: " << area << endl;
+    cout << "Calculated Area: " << area << endl;
 }
 
 int main () {
@@ -162,8 +156,6 @@ int main () {
 
     StartPipeSearch(maze, startrow, startcol, steps);
     cout << "Total steps: " << steps << " Half point: " << (steps/2 + steps%2) << endl;
-
-    // CheckMaze(maze, count);
-    // cout << "Total inside pieces: " << count << endl;
-    ShoelaceCalc();
+    
+    PicksTheoremCalc();
 }
