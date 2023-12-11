@@ -12,6 +12,8 @@
         "vector": "cpp",
         "istream": "cpp",
         "map": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "__locale": "cpp",
+        "ios": "cpp"
     }
 }
