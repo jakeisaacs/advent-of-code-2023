@@ -15,6 +15,7 @@
         "iosfwd": "cpp",
         "__locale": "cpp",
         "ios": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "span": "cpp"
     }
 }
