@@ -107,7 +107,6 @@ void StartPipeSearch(vector<string>& maze, int r, int c, int& steps) {
     } 
 }
 
-
 void PicksTheoremCalc() {
     int sum = 0;
     const int N = coords.size();

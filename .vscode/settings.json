@@ -20,6 +20,9 @@
         "string_view": "cpp",
         "__split_buffer": "cpp",
         "deque": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "cstdlib": "cpp",
+        "xtree": "cpp",
+        "utility": "cpp"
     }
 }
