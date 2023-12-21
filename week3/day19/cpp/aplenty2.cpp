@@ -9,65 +9,88 @@
 
 using namespace std;
 
-bool CheckPart( map<string, string>& workflows, vector<int>& part) {
-    string workflow, rule, result, key = "in";
+int MultiplyRanges(vector<pair<int, int> >& ranges) {
+    int total = 1;
+
+    for(int i=0;i<ranges.size();i++) {
+        total *= ranges[i].second - ranges[i].first;
+    }
+
+    return total;
+}
+
+int CheckRange( map<string, string>& workflows, vector<pair<int, int> > ranges, string key) {
+    string workflow, rule, result;
     const string XMAS = "xmas";
-    int pos, val, end, semipos;
+    int pos, val, sum, end, tmp, semipos, rngindx;
     bool lt;
 
     workflow = workflows[key];
-    pos = 0;
+    pos = -1;
+    sum = 0;
 
     while (true) {
-        workflow = workflow.substr(pos, workflow.length());
+        cout << workflow << endl;
+        workflow = workflow.substr(pos+1, workflow.length());
         pos = workflow.find(',');
         if (pos == string::npos) {
             workflow = workflow.substr(0,workflow.length());
             if(workflow[0] == 'A')
-                return true;
+                sum += MultiplyRanges(ranges);
             else if (workflow[0] == 'R')
-                return false;
+                sum += 0;
             else {
-                key = workflow;
-                workflow = workflows[key];
-                pos = 0;
+                sum += CheckRange(workflows, ranges, result);
             }
+            break;
         } else {
             rule = workflow.substr(0,pos);
             end = rule.length();
             semipos =  rule.find(':');
             result = rule.substr(semipos+1,end-semipos-1);
 
+            rngindx = XMAS.find(rule[0]);
             val = stoi(rule.substr(2,semipos-2));
             lt = rule[1] == '<';
 
-            if ((part[XMAS.find(rule[0])] < val && lt) || (part[XMAS.find(rule[0])] > val && !lt)) {
+            if(lt) {
+                tmp = ranges[rngindx].second;
+                ranges[rngindx].second = min(tmp, val);
                 if(result[0] == 'A')
-                    return true;
+                    sum += MultiplyRanges(ranges);
                 else if (result[0] == 'R')
-                    return false;
+                    sum += 0;
                 else {
-                    key = result;
-                    workflow = workflows[key];
-                    pos = 0;
+                    sum += CheckRange(workflows, ranges, result);
                 }
+                ranges[rngindx].first = max(ranges[rngindx].first, ranges[rngindx].second);
+                ranges[rngindx].second = tmp;
             } else {
-                pos++;
+                tmp = ranges[rngindx].first;
+                ranges[rngindx].first = max(tmp, val);
+                if(result[0] == 'A')
+                    sum += MultiplyRanges(ranges);
+                else if (result[0] == 'R')
+                    sum += 0;
+                else {
+                    sum += CheckRange(workflows, ranges, result);
+                }
+                ranges[rngindx].second = min(ranges[rngindx].first, ranges[rngindx].second);
+                ranges[rngindx].first = tmp;
             }
+
         }
     }
 
-    return false;
+    return sum;
 }
 
 int main () {
     ifstream f("../input.txt");
     string line, key;
-    smatch m;
-    regex e_parts("\\d+");
     int pos1, pos2, val, sum, total;
-    vector<int> v;
     map<string, string> workflows;
+    vector<pair<int, int> > ranges;
 
     while(f.is_open() && getline(f, line)) {
         //break on empty line (len might be over 0 for newline char)
@@ -80,23 +103,14 @@ int main () {
         line = line.substr(pos1+1, pos2);
 
         workflows[key] = line;
-
-        // cout << key << " " << workflows[key] << endl;
     }
 
-    while(f.is_open() && getline(f, line)) {
-        sum = 0;
-        while(regex_search(line, m, e_parts)) {
-            val = stoi(m[0].str());
-            sum += val;
-            v.push_back(val);
-            line = m.suffix().str();
-        }
-        
-        if (CheckPart(workflows, v)) total += sum;
+    for(int i=0;i<4;i++)
+        ranges.push_back(make_pair(0,4000));
 
-        v.clear();
-    }
+    total = CheckRange(workflows, ranges, "in");
+
+    // CheckRange();
 
     cout << "Total of valid parts: " << total << endl;
 

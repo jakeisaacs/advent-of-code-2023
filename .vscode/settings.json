@@ -23,6 +23,9 @@
         "system_error": "cpp",
         "cstdlib": "cpp",
         "xtree": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "concepts": "cpp",
+        "memory": "cpp",
+        "xmemory": "cpp"
     }
 }
